@@ -7,7 +7,8 @@ const
     dice = document.querySelector('.dice'),
     buttonRoll = document.querySelector('.btn--roll'),
     buttonHold = document.querySelector('.btn--hold'),
-    buttonNew = document.querySelector('.btn--new')
+    buttonNew = document.querySelector('.btn--new'),
+    winner = document.querySelectorAll('.winner')
 
 let
     scores = [0,0],
@@ -46,7 +47,16 @@ const holdScore = () => {
     document.querySelector(`#score--${activePlayer}`).textContent = scores[activePlayer]
     currentScore = 0
     document.querySelector(`#current--${activePlayer}`).textContent = currentScore
-    activePlayer = activePlayer === 0 ? 1 : 0
+    document.querySelector(`.player--${activePlayer}`).classList.remove('player--active')
+
+    if (scores[activePlayer] >= 100) {
+        winner[activePlayer].classList.remove('hidden')
+        buttonRoll.disabled = true
+    } else {
+        activePlayer = activePlayer === 0 ? 1 : 0
+        document.querySelector(`.player--${activePlayer}`).classList.add('player--active')
+    }
+
 }
 
 // Reset the game
@@ -55,6 +65,9 @@ const resetGame = () => {
     scores = [0,0]
     scorePlayerOne.textContent = scores[0]
     scorePlayerTwo.textContent = scores[1]
+    document.querySelector(`.player--${activePlayer}`).classList.add('player--active')
+    winner[activePlayer].classList.add('hidden')
+    buttonRoll.disabled = false
 }
 
 buttonRoll.addEventListener('click', rollDice)
